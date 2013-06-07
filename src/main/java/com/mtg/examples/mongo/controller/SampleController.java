@@ -46,7 +46,7 @@ public class SampleController {
     @RequestMapping(value="/shardRange", method=RequestMethod.GET)
     public @ResponseBody String getShardRange() {
         ObjectId id = new ObjectId();
-        return "<b>FROM:</b>" + id._time() + "<br/><b>TO:</b>" + id._time() + 0x3FFFF;
+        return "<b>FROM:</b>" + id._time() + "<br/><b>TO:</b>" + (id._time() + 0x3FFFF);
     }
 
 }
