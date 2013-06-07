@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+    <context:annotation-config />
+    
+    <!-- MongoDB Settings -->
+    <bean id="mongo" class="com.mongodb.Mongo">
+        <constructor-arg name="host" value="localhost" />
+        <constructor-arg name="options" ref="mongoOptions" />
+    </bean>
+    <bean id="mongoOptions" class="com.mongodb.MongoOptions">
+        <property name="connectionsPerHost" value="50" />
+        <property name="threadsAllowedToBlockForConnectionMultiplier" value="5" />
+        <property name="maxWaitTime" value="120000" />
+        <property name="connectTimeout" value="0" />
+        <property name="socketTimeout" value="0" />
+        <property name="socketKeepAlive" value="false" />
+        <property name="autoConnectRetry" value="false" />
+        <property name="maxAutoConnectRetryTime" value="0" />
+        <property name="safe" value="true" />
+        <property name="w" value="1" />
+        <property name="wtimeout" value="0" />
+        <property name="fsync" value="false" />
+        <property name="j" value="false" />
+    </bean>
+
+    <!-- Morphia Settings -->
+    <bean id="morphia" class="com.google.code.morphia.Morphia" />
+    <bean id="dsSharded" class="com.mtg.examples.mongo.datastore.DatastoreShardImpl">
+        <constructor-arg index="0" ref="morphia" />
+        <constructor-arg index="1" ref="mongo" />
+        <constructor-arg index="2" value="sampleDB" />
+    </bean>
+
+    <!-- Repositories -->
+    <bean id="userRepository" class="com.mtg.examples.mongo.repository.UserRepository">
+        <constructor-arg ref="dsSharded" />
+    </bean>
+
+    <!-- DAOs for the repositories above -->
+    <bean id="userDao" class="com.mtg.examples.mongo.daos.UserDaoMongoImpl" />
+
+</beans>

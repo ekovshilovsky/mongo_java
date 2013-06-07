@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.1.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <!-- Mapping the Content-Type of application/json to the correct converter -->
+            <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <bean class="org.springframework.http.MediaType">
+                            <constructor-arg value="application" />
+                            <constructor-arg value="json" />
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+            <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- The controller are autodetected POJOs labeled with the @Controller annotation. -->
+    <context:component-scan base-package="com.mtg.examples.mongo.controller" />
+    
+</beans>
